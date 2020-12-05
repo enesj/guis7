@@ -5,7 +5,6 @@
     [cljsjs.react-modal]
     [clojure.string :as str]))
 
-
 (def abs js/Math.abs)
 (def sqrt js/Math.sqrt)
 (def pow2 #(js/Math.pow % 2))
@@ -22,6 +21,12 @@
                   v
                   m))))))
 
+(defn get-x [e root]
+  (- (.-clientX e) (.-left (-> root .getBoundingClientRect))))
+
+(defn get-y [e root]
+  (- (.-clientY e) (.-top (-> root .getBoundingClientRect))))
+
 (defn slider [circles selection]
   [:input.slider {:type      "range"
                   :min       5
@@ -33,6 +38,11 @@
                                        (fn [x]
                                          (if (= @selection (:id x)) (assoc x :r (-> % .-target .-value)) x))
                                        @circles)))}])
+
+(defn update-history [history circles]
+  (-> history
+    (update :states (fn [y] (conj (vec (take (:pointer history) y))  @circles)))
+    (assoc :pointer (inc (:pointer history)))))
 
 (defn modal [modal selection circles history svg x y show]
   [(r/adapt-react-class js/ReactModal)
@@ -48,12 +58,10 @@
     :onRequestClose #(do
                        (reset! modal false)
                        (reset! show false)
-                       (swap! history (fn [x] (-> x
-                                                (update :states (fn [y] (conj (vec (take (:pointer x) y))  @circles)))
-                                                (assoc :pointer (inc (:pointer x))))))
+                       (swap! history (fn [x] (update-history x circles)))
                        (let [[d id r] (get-closest
-                                        (- (.-clientX %) (.-left (-> @svg .getBoundingClientRect)))
-                                        (- (.-clientY %) (.-top (-> @svg .getBoundingClientRect)))
+                                        (get-x % @svg)
+                                        (get-y % @svg)
                                         @circles)]
                          (if (> r d)
                            (reset! selection id))))}
@@ -71,7 +79,6 @@
     (swap! state-atom  #(conj % {:cx x :cy y :id id :r 20 :fill "gray" :fill-opacity 0}))
     (reset! selection id)))
 
-
 (defn draw-circles [state selection]
   (doall (for [circle state]
            (let [id (:id circle)
@@ -79,6 +86,10 @@
                                    (assoc circle :fill-opacity 0.2)
                                    circle)]
              ^{:key (:id circle)} [:circle  selected-circle]))))
+
+(defn un-re-do [history circles un-re]
+  (swap! history update :pointer un-re)
+  (reset! circles (get (:states @history) (dec (:pointer @history)))))
 
 (defn circles-component []
   (let [circles (r/atom #{})
@@ -93,19 +104,14 @@
     (fn []
       (let [state @circles
             selected @selection]
-
         [:<>
          [:div {:style {:display "flex" :flex-direction "row" :justify-content "center"  :width "800px"}}
           [:button  {:type "button" :style {:margin "0px 10px 10px 0px"}
                      :disabled (>= 0 (:pointer @history))
-                     :on-click #(do
-                                  (swap! history update :pointer dec)
-                                  (reset! circles (set (get (:states @history) (dec (:pointer @history))))))} "Undo"]
+                     :on-click (fn [x] ( un-re-do history circles dec))} "Undo"]
           [:button  {:type "button" :style {:margin "0px 0px 10px 0px"}
                      :disabled (>= (:pointer @history) (count (:states @history)))
-                     :on-click #(do
-                                  (swap! history update :pointer inc)
-                                  (reset! circles (get (:states @history) (dec (:pointer @history)))))} "Redo"]]
+                     :on-click (fn [x] ( un-re-do history circles inc))} "Redo"]]
          [:svg {:width "800px" :height "400px" :stroke "black"}
                (draw-circles state selected)
           [:rect {:x             0 :y 0 :width "800px" :height "400px"
@@ -114,7 +120,6 @@
                   :stroke-width  0.2
                   :stroke        "black"
                   :ref (fn [el] (reset! svg el))
-
                   :on-mouse-down (fn [e]
                                    (reset! x (.-clientX e))
                                    (reset! y (.-clientY e))
@@ -122,23 +127,21 @@
                                      (reset! slider true)
                                      (do
                                        (create-circle
-                                         (- (.-clientX e) (.-left (-> @svg .getBoundingClientRect)))
-                                         (- (.-clientY e) (.-top (-> @svg .getBoundingClientRect)))
+                                         (get-x e @svg)
+                                         (get-y e @svg)
                                          circles
                                          selection)
-                                       (swap! history #(-> %
-                                                         (update :states (fn [x] (conj (vec (take (:pointer %) x))  @circles)))
-                                                         (assoc :pointer (inc  (:pointer %))))))))
+                                       (swap! history (fn [x] (update-history x circles))))))
                   :on-mouse-move (fn [e]
                                    (let [[d id r] (get-closest
-                                                    (- (.-clientX e) (.-left (-> @svg .getBoundingClientRect)))
-                                                    (- (.-clientY e) (.-top (-> @svg .getBoundingClientRect)))
+                                                    (get-x e @svg)
+                                                    (get-y e @svg)
                                                     state)]
                                      (if (> r d)
                                        (reset! selection id)
                                        (reset! selection nil))))}]]
-         (modal slider selection circles history svg x y show-slider)
-         [:pre {:style {:margin-top 50}} (with-out-str (cljs.pprint/pprint @history))]]))))
+         (modal slider selection circles history svg x y show-slider)]))))
+         ;[:pre {:style {:margin-top 50}} (with-out-str (cljs.pprint/pprint @history))]]))))
 
 (defn page []
   [:div
