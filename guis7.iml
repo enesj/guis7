@@ -28,6 +28,7 @@
     <orderEntry type="library" name="Deps: commons-fileupload:1.4" level="project" />
     <orderEntry type="library" name="Deps: org.codehaus.mojo/animal-sniffer-annotations:1.14" level="project" />
     <orderEntry type="library" name="Deps: metosin/spec-tools:0.10.3" level="project" />
+    <orderEntry type="library" name="Deps: cljsjs/react-modal:3.4.4-1" level="project" />
     <orderEntry type="library" name="Deps: cljsjs/react-dom:16.13.0-0" level="project" />
     <orderEntry type="library" name="Deps: lambdaisland/deep-diff:0.0-47" level="project" />
     <orderEntry type="library" name="Deps: com.gfredericks/test.chuck:0.2.10" level="project" />

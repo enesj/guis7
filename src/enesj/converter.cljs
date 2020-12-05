@@ -12,7 +12,7 @@
                              :style {:margin-right 5}
                              :on-change #(do
                                            (swap! temperature assoc :celsius (-> % .-target .-value))
-                                           (when-not  (re-find #"[^0123456789]" (-> % .-target .-value))
+                                           (when-not  (re-find #"[^0123456789-]" (-> % .-target .-value))
                                              (swap! temperature assoc :fahrenheit (+ (* (-> % .-target .-value) (/ 9 5)) 32))))}]
         [:label {:style {:margin-right 5}}
          "Celsius = "]

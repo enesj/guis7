@@ -75,11 +75,11 @@
                                    (delete-item (:name state) (:surname state) crud)
                                    (swap! crud assoc :name nil)
                                    (swap! crud assoc :surname nil)
-                                   (swap! crud assoc :selection nil))} "Delete"]]]))))
+                                   (swap! crud assoc :selection nil))} "Delete"]]
 
 
 
-         ;[:pre {:style {:margin-top 150}} (with-out-str (cljs.pprint/pprint @crud))]]))))
+         [:pre {:style {:margin-top 150}} (with-out-str (cljs.pprint/pprint @crud))]]))))
 
 
 (defn page []
