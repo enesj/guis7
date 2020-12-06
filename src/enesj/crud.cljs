@@ -29,7 +29,6 @@
              (let [{:keys [name surname]} item]
                ^{:key (hash (str name " " surname))} [:option {:value (str name ", " surname) :style {:margin "2px 2px 0px 0px"}} (str name " " surname)])))))
 
-
 (defn crud-component []
   (let [crud (r/atom {:filter nil :name nil :surname nil :selection nil :list [{:name "Enes" :surname "Jakic"} {:name "Irma" :surname "Jakic"}]})]
     (fn []
@@ -76,8 +75,6 @@
                                    (swap! crud assoc :name nil)
                                    (swap! crud assoc :surname nil)
                                    (swap! crud assoc :selection nil))} "Delete"]]]))))
-
-         ;[:pre {:style {:margin-top 150}} (with-out-str (cljs.pprint/pprint @crud))]]))))
 
 (defn page []
   [:div {:style {:margin-left 12 :max-width "800px"}}

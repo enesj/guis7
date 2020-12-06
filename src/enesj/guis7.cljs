@@ -1,12 +1,10 @@
 (ns ^:figwheel-hooks enesj.guis7
   (:require
-   [goog.dom :as gdom]
    [reagent.core :as r :refer [atom]]
    [reagent.dom :as rdom]
    [reitit.frontend :as rf]
    [reitit.frontend.easy :as rfe]
    [reitit.coercion.spec :as rss]
-   [spec-tools.data-spec :as ds]
    [enesj.counter :as counter]
    [enesj.converter :as converter]
    [enesj.flight-booker :as flight-booker]
@@ -32,7 +30,6 @@
    (if @match
      (let [view (:view (:data @match))]
        [view @match]))])
-   ;[:pre {:style {:margin-top 150}} (with-out-str (cljs.pprint/pprint @match))]])
 
 (def routes
   [["/counter"
@@ -62,7 +59,6 @@
   (rfe/start!
     (rf/router routes {:data {:coercion rss/coercion}})
     (fn [m] (reset! match m))
-    ;; set to false to enable HistoryAPI
     {:use-fragment true})
   (rdom/render [current-page] (.getElementById js/document "app")))
 

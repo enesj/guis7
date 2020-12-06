@@ -83,6 +83,7 @@
     <orderEntry type="library" name="Deps: com.google.protobuf/protobuf-java:3.11.1" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit-swagger-ui:0.5.5" level="project" />
     <orderEntry type="library" name="Deps: metosin/reitit:0.5.5" level="project" />
+    <orderEntry type="library" name="Deps: com.stuartsierra/dependency:1.0.0" level="project" />
     <orderEntry type="library" name="Deps: tech.droit/clj-diff:1.0.1" level="project" />
     <orderEntry type="library" name="Deps: borkdude/sci.impl.reflector:0.0.1" level="project" />
     <orderEntry type="library" name="Deps: borkdude/sci:0.1.0" level="project" />

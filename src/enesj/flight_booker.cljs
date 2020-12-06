@@ -2,7 +2,6 @@
   (:require
     [reagent.core :as r]))
 
-
 (defn flight-booker-component []
   (let [flight (r/atom {:direction  :one-way
                         :start-date "12.02.2020"
@@ -27,7 +26,6 @@
           [:input#submit {:type      "submit" :value "Book"
                           :disabled submit-disabled
                           :on-click #(js/alert (str "You have booked a one-way flight on " (:start-date state)))}]]]))))
-          ;[:pre {:style {:margin-top 150}} (with-out-str (cljs.pprint/pprint state))]]]))))
 
 (defn page []
   [:div {:style {:margin-left 12}}

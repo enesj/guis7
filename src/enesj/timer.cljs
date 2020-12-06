@@ -9,7 +9,6 @@
                        (swap! elapsed-time update :time inc))
       1000)
     (fn []
-      (let [state @elapsed-time]
         [:<>
          [:label "Elapsed Time:"]
          [:meter {:min   0 :max (:max @elapsed-time)
@@ -22,8 +21,7 @@
                          :value     (:max @elapsed-time)
                          :on-change #(swap! elapsed-time assoc :max (-> % .-target .-value))}]
          [:button {:on-click #(swap! elapsed-time assoc :time 0)}
-          " reset"]]))))
-         ;[:pre {:style {:margin-top 150}} (with-out-str (cljs.pprint/pprint @elapsed-time))]]))))
+          " reset"]])))
 
 (defn page []
   [:div {:style {:display "flex" :flex-direction "column" :justify-content "space-between" :width "20%" :height "200px" :margin "10px 0 0 12px"}}

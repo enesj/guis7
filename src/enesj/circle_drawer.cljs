@@ -1,9 +1,7 @@
 (ns enesj.circle-drawer
   (:require
     [reagent.core :as r]
-    [reagent.dom :as rdom]
-    [cljsjs.react-modal]
-    [clojure.string :as str]))
+    [cljsjs.react-modal]))
 
 (def abs js/Math.abs)
 (def sqrt js/Math.sqrt)
@@ -141,7 +139,6 @@
                                        (reset! selection id)
                                        (reset! selection nil))))}]]
          (modal slider selection circles history svg x y show-slider)]))))
-         ;[:pre {:style {:margin-top 50}} (with-out-str (cljs.pprint/pprint @history))]]))))
 
 (defn page []
   [:div

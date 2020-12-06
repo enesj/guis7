@@ -2,6 +2,7 @@
         org.clojure/clojurescript {:mvn/version "1.10.773"}
         metosin/reitit  {:mvn/version "0.5.5"}
         reagent/reagent {:mvn/version "0.10.0"}
+        com.stuartsierra/dependency {:mvn/version "1.0.0"}
         cljsjs/react-modal {:mvn/version "3.4.4-1"}}
  :paths ["src" "resources"]
  :aliases {:fig {:extra-deps

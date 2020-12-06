@@ -11,7 +11,6 @@
     [:button {:type "button"
               :on-click #(swap! click-count inc)} "Count"]])))
 
-
 (defn page []
  [:div {:style {:margin-left 12}}
   [:h2 "Counter"]
